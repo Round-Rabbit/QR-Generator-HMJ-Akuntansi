@@ -65,6 +65,11 @@
       font-size: 14px;
       color: #ccc;
     }
+
+    a {
+      color: #00ccff;
+      text-decoration: none;
+    }
   </style>
 </head>
 <body>
@@ -78,27 +83,36 @@
     <p>Masukkan link apa pun untuk menghasilkan QR Code:</p>
     <input type="text" id="link" placeholder="https://contoh.com/..." />
 
-    <label for="logo">Silahkan Masukkan Logo disini (opsional):</label>
-    <input type="file" id="logo" accept="image/*" />
+    <label for="logo">Masukkan Logo (PNG, JPG, HEIC):</label>
+    <input type="file" id="logo" accept="image/png, image/jpeg, image/heic" />
 
     <button onclick="generateQR()">Buat QR</button>
 
     <div class="qr" id="qrcode"></div>
 
     <footer>
-  &copy; <span id="year"></span> RoundRabbit. Seluruh hak cipta dilindungi. Dibuat oleh Ar.Al-Ghafiqi.<br/>
-  <a href="https://instagram.com/fiqifriday" target="_blank" style="color: #00ccff; text-decoration: none;">📷 Instagram: @fiqifriday</a>
-</footer>
+      &copy; <span id="year"></span> RoundRabbit. Seluruh hak cipta dilindungi. Dibuat oleh Ar.Al-Ghafiqi.<br/>
+      <a href="https://instagram.com/fiqifriday" target="_blank">📷 Instagram: @fiqifriday</a>
+    </footer>
   </main>
 
   <script>
+    // Paksa agar QRCode pakai <canvas>
+    QRCode.prototype._android = false;
+
     function generateQR() {
       const container = document.getElementById("qrcode");
       container.innerHTML = "";
+
       const link = document.getElementById("link").value.trim();
-      if (!link.startsWith("http")) return alert("Masukkan URL yang valid.");
+      if (!link.startsWith("http")) {
+        alert("Masukkan URL yang valid (dimulai dengan http atau https)");
+        return;
+      }
 
       const qrSize = 256;
+
+      // Buat QR Code
       const qr = new QRCode(container, {
         text: link,
         width: qrSize,
@@ -108,30 +122,44 @@
         correctLevel: QRCode.CorrectLevel.H
       });
 
+      // Tunggu QR selesai dirender
       setTimeout(() => {
         const logoInput = document.getElementById("logo");
         if (logoInput.files && logoInput.files[0]) {
+          const file = logoInput.files[0];
           const reader = new FileReader();
+
           reader.onload = function (e) {
             const qrCanvas = container.querySelector('canvas');
+            if (!qrCanvas) {
+              alert("QR tidak dapat dirender.");
+              return;
+            }
+
             const ctx = qrCanvas.getContext('2d');
             const logoImg = new Image();
             logoImg.src = e.target.result;
+
             logoImg.onload = function () {
               const logoSize = qrSize * 0.2;
               const x = (qrSize - logoSize) / 2;
               const y = (qrSize - logoSize) / 2;
+
+              // Latar belakang putih
               ctx.fillStyle = "#fff";
-              ctx.fillRect(x - 4, y - 4, logoSize + 8, logoSize + 8); // Background putih logo
+              ctx.fillRect(x - 4, y - 4, logoSize + 8, logoSize + 8);
+
+              // Gambar logo
               ctx.drawImage(logoImg, x, y, logoSize, logoSize);
             };
           };
-          reader.readAsDataURL(logoInput.files[0]);
+
+          reader.readAsDataURL(file);
         }
-      }, 100);
+      }, 200);
     }
 
-    // Tahun otomatis
+    // Isi tahun otomatis
     document.getElementById("year").textContent = new Date().getFullYear();
   </script>
 </body>
