@@ -63,6 +63,10 @@
       align-items: center;
     }
 
+    #download-btn {
+      margin-top: 20px;
+    }
+
     footer {
       margin-top: 40px;
       font-size: 14px;
@@ -78,12 +82,12 @@
 <body>
   <main>
     <header>
-      <img src="Logo HMJ Amandemen.png" alt="Logo HMJ Amandemen" id="logo-preview"/>
-      <h1>Himpunan Mahasiswa Jurusan Akuntansi</h1>
-      <h2>QR Code Generator</h2>
+      <img src="Logo.png" alt="Logo RoundRabbit" id="logo-preview"/>
+      <h1>RoundRabbit QR Generator</h1>
+      <h2>by Fiqi</h2>
     </header>
 
-    <p>Masukkan link apa pun untuk menghasilkan QR Code:</p>
+    <p>Masukkan link untuk membuat QR Code:</p>
     <input type="text" id="link" placeholder="https://contoh.com/..." />
 
     <label for="logo">Upload logo (PNG/JPG/HEIC):</label>
@@ -97,8 +101,8 @@
     </div>
 
     <footer>
-      &copy; <span id="year"></span> RoundRabbit. Seluruh hak cipta dilindungi. Dibuat oleh Ar.Al-Ghafiqi.<br/>
-      <a href="https://instagram.com/fiqifriday" target="_blank">📷 Instagram: @fiqifriday</a>
+      &copy; <span id="year"></span> RoundRabbit. Seluruh hak cipta dilindungi.<br/>
+      Dibuat oleh Ar. Al-Ghafiqi • <a href="https://instagram.com/fiqifriday" target="_blank">📷 Instagram @fiqifriday</a>
     </footer>
   </main>
 
@@ -109,4 +113,60 @@
       const canvas = document.getElementById("qr-canvas");
       const ctx = canvas.getContext("2d");
       const link = document.getElementById("link").value.trim();
-      const logoInput = documen
+      const logoInput = document.getElementById("logo");
+      const downloadBtn = document.getElementById("download-btn");
+
+      if (!link.startsWith("http")) {
+        alert("Masukkan URL yang valid (dimulai dengan http atau https).");
+        return;
+      }
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      const qr = new QRious({
+        value: link,
+        size: 300,
+        level: 'H',
+        background: 'white',
+        foreground: 'black'
+      });
+
+      const tempImg = new Image();
+      tempImg.src = qr.toDataURL();
+      tempImg.onload = function () {
+        ctx.drawImage(tempImg, 0, 0);
+
+        if (logoInput.files && logoInput.files[0]) {
+          const reader = new FileReader();
+          reader.onload = function (e) {
+            const logo = new Image();
+            logo.src = e.target.result;
+            logo.onload = function () {
+              const size = 60;
+              const x = (canvas.width - size) / 2;
+              const y = (canvas.height - size) / 2;
+
+              ctx.fillStyle = "#fff";
+              ctx.fillRect(x - 4, y - 4, size + 8, size + 8); // border putih
+              ctx.drawImage(logo, x, y, size, size);
+
+              downloadBtn.style.display = "inline-block";
+            };
+          };
+          reader.readAsDataURL(logoInput.files[0]);
+        } else {
+          downloadBtn.style.display = "inline-block";
+        }
+      };
+    }
+
+    function downloadQR() {
+      const canvas = document.getElementById("qr-canvas");
+      const link = document.createElement('a');
+      link.download = 'qr-code.png';
+      link.href = canvas.toDataURL("image/png");
+      link.click();
+    }
+  </script>
+</body>
+</html>
