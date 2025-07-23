@@ -57,11 +57,10 @@
     }
 
     .qr {
-  margin-top: 30px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
+      margin-top: 30px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
     footer {
@@ -110,63 +109,4 @@
       const canvas = document.getElementById("qr-canvas");
       const ctx = canvas.getContext("2d");
       const link = document.getElementById("link").value.trim();
-      const logoInput = document.getElementById("logo");
-      const downloadBtn = document.getElementById("download-btn");
-
-      if (!link.startsWith("http")) {
-        alert("Masukkan URL yang valid.");
-        return;
-      }
-
-      // Reset canvas
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      // Buat QR tanpa logo dulu
-      const qr = new QRious({
-        element: canvas,
-        value: link,
-        size: 300,
-        level: 'H',
-        background: 'white',
-        foreground: 'black'
-      });
-
-      // Sembunyikan tombol download sampai QR fix
-      downloadBtn.style.display = "none";
-
-      // Tambahkan logo jika ada
-      if (logoInput.files && logoInput.files[0]) {
-        const reader = new FileReader();
-        reader.onload = function (e) {
-          const logo = new Image();
-          logo.src = e.target.result;
-          logo.onload = function () {
-            const size = 60;
-            const x = (canvas.width - size) / 2;
-            const y = (canvas.height - size) / 2;
-
-            ctx.fillStyle = "#fff";
-            ctx.fillRect(x - 4, y - 4, size + 8, size + 8); // background putih
-            ctx.drawImage(logo, x, y, size, size);
-
-            // Aktifkan tombol download setelah logo ditambahkan
-            downloadBtn.style.display = "inline-block";
-          };
-        };
-        reader.readAsDataURL(logoInput.files[0]);
-      } else {
-        // Kalau tanpa logo langsung aktifkan download
-        downloadBtn.style.display = "inline-block";
-      }
-    }
-
-    function downloadQR() {
-      const canvas = document.getElementById("qr-canvas");
-      const link = document.createElement('a');
-      link.download = 'qr-code.png';
-      link.href = canvas.toDataURL("image/png");
-      link.click();
-    }
-  </script>
-</body>
-</html>
+      const logoInput = documen
