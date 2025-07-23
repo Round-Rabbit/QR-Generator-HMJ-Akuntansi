@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>QR Generator | Bagian Umum SETDA Paser</title>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: url('background.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: #fff;
+    }
+
+    main {
+      background: rgba(0, 0, 0, 0.6);
+      padding: 30px;
+      max-width: 600px;
+      margin: 50px auto;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      text-align: center;
+    }
+
+    header img {
+      width: 80px;
+      margin-bottom: 10px;
+    }
+
+    header h1 {
+      margin: 5px 0;
+    }
+
+    input[type="text"], input[type="file"] {
+      padding: 10px;
+      width: 100%;
+      margin-top: 20px;
+      font-size: 16px;
+      border-radius: 6px;
+      border: none;
+    }
+
+    button {
+      margin-top: 10px;
+      padding: 10px 20px;
+      font-size: 16px;
+      background: #00aaff;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 6px;
+    }
+
+    .qr {
+      margin-top: 30px;
+    }
+
+    #downloadLink {
+      display: none;
+      margin-top: 15px;
+      color: #00ccff;
+      text-decoration: underline;
+      font-size: 16px;
+    }
+
+    footer {
+      margin-top: 40px;
+      font-size: 14px;
+      color: #ccc;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <img src="logo PASER.png" alt="Logo Paser" />
+      <h1>Bagian Umum SETDA Kabupaten Paser</h1>
+      <h2>QR Code Generator</h2>
+    </header>
+
+    <p>Masukkan link (Drive, Form, Website, dll) dan unggah logo himpunan Anda:</p>
+    <input type="text" id="folderurl" placeholder="https://contoh.com/link-anda..." />
+    <input type="file" id="logoUploader" accept="image/*" />
+    <button onclick="generateQR()">Buat QR</button>
+
+    <div class="qr">
+      <canvas id="qrcanvas" style="margin-top: 20px;"></canvas>
+    </div>
+
+    <a id="downloadLink" download="qrcode_with_logo.png">Download QR Code</a>
+
+    <footer>
+      &copy; <span id="year"></span> Naoki-NYT | Fiqi Personal Tools
+    </footer>
+  </main>
+
+  <script>
+    function generateQR() {
+      const url = document.getElementById("folderurl").value.trim();
+      const logoInput = document.getElementById("logoUploader");
+      const canvas = document.getElementById("qrcanvas");
+      const ctx = canvas.getContext("2d");
+      const downloadLink = document.getElementById("downloadLink");
+
+      if (!url.startsWith("http://") && !url.startsWith("https://")) {
+        alert("Masukkan link yang valid dimulai dengan http:// atau https://");
+        return;
+      }
+
+      QRCode.toCanvas(canvas, url, { width: 300 }, function (err) {
+        if (err) return console.error(err);
+
+        if (logoInput.files.length > 0) {
+          const logo = new Image();
+          logo.onload = function () {
+            const logoSize = 60;
+            const x = (canvas.width - logoSize) / 2;
+            const y = (canvas.height - logoSize) / 2;
+
+            // Bikin bentuk bulat
+            ctx.save();
+            ctx.beginPath();
+            ctx.arc(x + logoSize/2, y + logoSize/2, logoSize/2, 0, Math.PI * 2, true);
+            ctx.closePath();
+            ctx.clip();
+
+            ctx.drawImage(logo, x, y, logoSize, logoSize);
+            ctx.restore();
+
+            // Tampilkan tombol download setelah QR + logo jadi
+            downloadLink.href = canvas.toDataURL("image/png");
+            downloadLink.style.display = "inline-block";
+          };
+          logo.src = URL.createObjectURL(logoInput.files[0]);
+        } else {
+          // Jika tidak ada logo, tetap bisa download QR-nya
+          downloadLink.href = canvas.toDataURL("image/png");
+          downloadLink.style.display = "inline-block";
+        }
+      });
+    }
+
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
