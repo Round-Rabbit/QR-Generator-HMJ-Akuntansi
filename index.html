@@ -6,6 +6,7 @@
   <title>QR Generator | Himpunan Mahasiswa Jurusan Akuntansi</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
   <style>
+    /* Styling tetap sama */
     body {
       font-family: 'Segoe UI', sans-serif;
       margin: 0;
@@ -13,13 +14,24 @@
       background: url('Background.jpg') no-repeat center center fixed;
       background-size: cover;
       color: #fff;
+      /* Pastikan body terisi penuh */
+      min-height: 100vh; 
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* Tambahkan style untuk menyembunyikan konten awal */
+    #main-content {
+        display: none; /* Konten utama disembunyikan secara default */
     }
 
     main {
       background: rgba(0, 0, 0, 0.6);
       padding: 30px;
       max-width: 600px;
-      margin: 50px auto;
+      /* Hapus margin-top 50px karena sudah diatur di body */
+      margin: auto; 
       border-radius: 12px;
       box-shadow: 0 4px 15px rgba(0,0,0,0.3);
       text-align: center;
@@ -34,17 +46,15 @@
       margin: 5px 0;
     }
 
-    /* Perbaikan: Mengurangi margin bawah pada header untuk mendekatkan ke paragraf selanjutnya */
     header {
-      margin-bottom: 5px; /* Nilai diperkecil dari default */
+      margin-bottom: 5px;
     }
 
-    /* Menambahkan style baru untuk pesan keamanan */
     .security-message {
       font-size: 12px;
-      color: #00ccff; /* Warna biru untuk menonjolkan */
+      color: #00ccff;
       margin-top: 5px;
-      margin-bottom: 15px; /* Mengurangi jarak ke elemen input */
+      margin-bottom: 15px;
     }
 
     input, label {
@@ -58,10 +68,9 @@
       box-sizing: border-box;
     }
 
-    /* Perbaikan: Mengurangi margin atas pada paragraf link untuk mengurangi spasi dengan header */
     main p:first-of-type {
         margin-top: 10px;
-        margin-bottom: 5px; /* Mengurangi jarak ke pesan keamanan */
+        margin-bottom: 5px;
     }
 
     button {
@@ -99,36 +108,68 @@
   </style>
 </head>
 <body>
-  <main>
-    <header>
-      <img src="Logo HMJ Amandemen.png" alt="Logo HMJ Amandemen" id="logo-preview"/>
-      <h1>QR Generator</h1>
-      <h2>HMJ Akuntansi</h2>
-    </header>
-
-    <p>Masukkan link untuk membuat QR Code:</p>
-    <p class="security-message">Semua aktivitas yang ada di web ini terenkripsi secara end-to-end</p>
-
-    <input type="text" id="link" placeholder="https://contoh.com/..." />
-
-    <label for="logo">Upload logo (PNG/JPG/HEIC):</label>
-    <input type="file" id="logo" accept="image/*" />
-
-    <button onclick="generateQR()">Buat QR</button>
-
-    <div class="qr">
-      <canvas id="qr-canvas" width="300" height="300"></canvas>
-      <button id="download-btn" style="display: none;" onclick="downloadQR()">Download QR</button>
-    </div>
-
-    <footer>
-      &copy; <span id="year"></span> fiqifriday. Seluruh hak cipta dilindungi.<br/>
-      Dibuat oleh Abdurrahman Al-Ghafiqi • <a href="https://instagram.com/fiqifriday" target="_blank">📷 Instagram @fiqifriday</a>
-    </footer>
-  </main>
+  <div id="main-content">
+    <main>
+      <header>
+        <img src="Logo HMJ Amandemen.png" alt="Logo HMJ Amandemen" id="logo-preview"/>
+        <h1>QR Generator</h1>
+        <h2>HMJ Akuntansi</h2>
+      </header>
+  
+      <p>Masukkan link untuk membuat QR Code:</p>
+      <p class="security-message">Semua aktivitas yang ada di web ini terenkripsi secara end-to-end</p>
+  
+      <input type="text" id="link" placeholder="https://contoh.com/..." />
+  
+      <label for="logo">Upload logo (PNG/JPG/HEIC):</label>
+      <input type="file" id="logo" accept="image/*" />
+  
+      <button onclick="generateQR()">Buat QR</button>
+  
+      <div class="qr">
+        <canvas id="qr-canvas" width="300" height="300"></canvas>
+        <button id="download-btn" style="display: none;" onclick="downloadQR()">Download QR</button>
+      </div>
+  
+      <footer>
+        &copy; <span id="year"></span> fiqifriday. Seluruh hak cipta dilindungi.<br/>
+        Dibuat oleh Abdurrahman Al-Ghafiqi • <a href="https://instagram.com/fiqifriday" target="_blank">📷 Instagram @fiqifriday</a>
+      </footer>
+    </main>
+  </div>
+  
 
   <script>
     document.getElementById("year").textContent = new Date().getFullYear();
+
+    // Fungsi untuk otentikasi
+    function checkPassword() {
+        const correctPassword = "fiqiganteng"; // <-- Ganti sandi ini sesuai kebutuhan Anda
+        let passwordAttempt = prompt("Masukkan Sandi Akses Eksklusif:");
+        
+        // Loop hingga sandi benar atau pengguna membatalkan
+        while (passwordAttempt !== correctPassword) {
+            if (passwordAttempt === null) {
+                // Jika pengguna menekan 'Cancel', kita bisa menghentikan atau mengarahkan ke halaman lain
+                alert("Akses dibatalkan. Silakan masukkan sandi untuk mengakses web.");
+                // Jika dibatalkan, kita panggil lagi prompt agar selalu tertahan di halaman ini
+                passwordAttempt = prompt("Masukkan Sandi Akses Eksklusif:"); 
+            } else {
+                passwordAttempt = prompt("Sandi salah! Masukkan Sandi Akses Eksklusif:");
+            }
+        }
+        
+        // Jika sandi benar
+        if (passwordAttempt === correctPassword) {
+            document.getElementById("main-content").style.display = "block"; // Tampilkan konten utama
+            document.body.style.alignItems = "initial"; // Kembalikan alignment body
+        }
+    }
+
+    // Panggil fungsi otentikasi saat halaman dimuat
+    checkPassword();
+
+    // --- Fungsi QR Generator & Download (tetap sama) ---
 
     function generateQR() {
       const canvas = document.getElementById("qr-canvas");
