@@ -215,39 +215,53 @@
 
   <script>
     document.getElementById("year").textContent = new Date().getFullYear();
-    const correctPassword = "hmjakun"; // <-- SANDI ANDA
+    const correctPassword = "fiqigagah"; 
 
-    /* Fungsi untuk menampilkan/menyembunyikan sandi */
     function togglePasswordVisibility() {
         const passwordInput = document.getElementById('password-input');
         const toggleButton = document.getElementById('toggle-password');
         
         if (passwordInput.type === 'password') {
             passwordInput.type = 'text';
-            toggleButton.textContent = '🔒'; // Ubah ikon menjadi gembok
+            toggleButton.textContent = '🔒';
         } else {
             passwordInput.type = 'password';
-            toggleButton.textContent = '👁️'; // Ubah ikon menjadi mata
+            toggleButton.textContent = '👁️';
         }
     }
 
-    /* Fungsi untuk memeriksa sandi */
     function checkPassword() {
         const enteredPassword = document.getElementById('password-input').value.trim();
         
         if (enteredPassword === correctPassword) {
-            // Sandi benar: Sembunyikan layer sandi dan tampilkan konten utama
             document.getElementById('password-layer').style.display = 'none';
             document.getElementById('qr-generator-content').style.display = 'block';
         } else {
-            // Sandi salah: Beri peringatan
             alert("Sandi Akses Salah. Silakan coba lagi.");
-            document.getElementById('password-input').value = ''; // Kosongkan input
-            document.getElementById('password-input').focus(); // Fokuskan kembali ke input
+            document.getElementById('password-input').value = ''; 
+            document.getElementById('password-input').focus();
         }
     }
 
-    // --- Fungsi QR Generator & Download (TIDAK DIUBAH) ---
+    // **********************************************
+    // PERBAIKAN: EVENT LISTENER UNTUK TOMBOL ENTER
+    // **********************************************
+    document.addEventListener('DOMContentLoaded', (event) => {
+        const passwordInput = document.getElementById('password-input');
+        
+        if (passwordInput) {
+            passwordInput.addEventListener('keypress', function(e) {
+                // e.key === 'Enter' adalah cara modern untuk mendeteksi Enter
+                if (e.key === 'Enter') {
+                    e.preventDefault(); 
+                    checkPassword(); 
+                }
+            });
+            // Opsional: Fokuskan langsung ke input sandi saat halaman dimuat
+            passwordInput.focus();
+        }
+    });
+    // **********************************************
 
     function generateQR() {
       const canvas = document.getElementById("qr-canvas");
