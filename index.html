@@ -34,6 +34,19 @@
       margin: 5px 0;
     }
 
+    /* Perbaikan: Mengurangi margin bawah pada header untuk mendekatkan ke paragraf selanjutnya */
+    header {
+      margin-bottom: 5px; /* Nilai diperkecil dari default */
+    }
+
+    /* Menambahkan style baru untuk pesan keamanan */
+    .security-message {
+      font-size: 12px;
+      color: #00ccff; /* Warna biru untuk menonjolkan */
+      margin-top: 5px;
+      margin-bottom: 15px; /* Mengurangi jarak ke elemen input */
+    }
+
     input, label {
       padding: 10px;
       width: 100%;
@@ -43,6 +56,12 @@
       border: none;
       display: block;
       box-sizing: border-box;
+    }
+
+    /* Perbaikan: Mengurangi margin atas pada paragraf link untuk mengurangi spasi dengan header */
+    main p:first-of-type {
+        margin-top: 10px;
+        margin-bottom: 5px; /* Mengurangi jarak ke pesan keamanan */
     }
 
     button {
@@ -88,6 +107,8 @@
     </header>
 
     <p>Masukkan link untuk membuat QR Code:</p>
+    <p class="security-message">Semua aktivitas yang ada di web ini terenkripsi secara end-to-end</p>
+
     <input type="text" id="link" placeholder="https://contoh.com/..." />
 
     <label for="logo">Upload logo (PNG/JPG/HEIC):</label>
