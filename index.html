@@ -6,15 +6,6 @@
   <title>QR Generator | Jurusan Akuntansi</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
   
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-EFNE3V1XX6"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    
-    // GANTI G-EFNE3V1XX6 DENGAN ID PENGUKURAN ANDA JIKA BERBEDA
-    gtag('config', 'G-EFNE3V1XX6');
-  </script>
     <style>
     /* ****************************************************** */
     /* STYLING UTAMA QR GENERATOR (TIDAK DIUBAH ISI UTAMANYA) */
@@ -174,8 +165,16 @@
         font-size: 18px;
     }
   </style>
-</head>
-<body>
+  
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-EFNE3V1XX6"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-EFNE3V1XX6');
+  </script>
+  
+</head> <body>
 
   <div id="password-layer">
     <div id="password-box">
@@ -325,12 +324,11 @@
     }
 
     function downloadQR() {
-      // START: KODE PELACAKAN EVENT GA4 - Melacak klik download QR
+      // KODE PELACAKAN EVENT GA4 - Melacak klik download QR
       gtag('event', 'qr_download', {
           'event_category': 'QR_Converter',
           'event_label': 'Download Button Click'
       });
-      // END: KODE PELACAKAN EVENT GA4
       
       const canvas = document.getElementById("qr-canvas");
       const link = document.createElement('a');
