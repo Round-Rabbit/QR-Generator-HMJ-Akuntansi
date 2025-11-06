@@ -324,12 +324,24 @@
       };
     }
 
-    function downloadQR() {
-      const canvas = document.getElementById("qr-canvas");
-      const link = document.createElement('a');
-      link.download = 'qr-code.png';
-      link.href = canvas.toDataURL("image/png");
-      link.click();
+    function downloadQR() {// ... kode JavaScript sebelumnya ...
+
+    function downloadQR() {
+      gtag('event', 'qr_download', {
+          'event_category': 'QR_Converter',
+          'event_label': 'Download Button Click'
+      });
+      // ------------------------------------------------
+      
+      const canvas = document.getElementById("qr-canvas");
+      const link = document.createElement('a');
+      link.download = 'qr-code.png';
+      link.href = canvas.toDataURL("image/png");
+      link.click();
+    }
+  </script>
+</body>
+</html>
     }
   </script>
 </body>
