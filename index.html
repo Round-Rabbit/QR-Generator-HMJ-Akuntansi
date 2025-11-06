@@ -1,195 +1,343 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QR Generator | Himpunan Mahasiswa Jurusan Akuntansi</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>QR Generator | Jurusan Akuntansi</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+  
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-EFNE3V1XX6"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
     
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
-    
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-EFNE3V1XX6"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-EFNE3V1XX6');
-    </script>
+    // GANTI G-EFNE3V1XX6 DENGAN ID PENGUKURAN ANDA JIKA BERBEDA
+    gtag('config', 'G-EFNE3V1XX6');
+  </script>
+    <style>
+    /* ****************************************************** */
+    /* STYLING UTAMA QR GENERATOR (TIDAK DIUBAH ISI UTAMANYA) */
+    /* ****************************************************** */
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: url('Background.jpeg') no-repeat center center fixed;
+      background-size: cover;
+      color: #fff;
+    }
 
-    <style>
-        /* ****************************************************** */
-        /* STYLING UTAMA QR GENERATOR (TIDAK DIUBAH ISI UTAMANYA) */
-        /* ****************************************************** */
-        body {
-          font-family: 'Segoe UI', sans-serif;
-          margin: 0;
-          padding: 0;
-          background: url('Background.jpg') no-repeat center center fixed;
-          background-size: cover;
-          color: #fff;
-        }
+    #qr-generator-content {
+        /* Konten QR Generator akan disembunyikan secara default */
+        display: none; 
+    }
 
-        #qr-generator-content {
-            /* Konten QR Generator akan disembunyikan secara default */
-            display: none; 
-        }
+    main {
+      background: rgba(0, 0, 0, 0.6);
+      padding: 30px;
+      max-width: 600px;
+      margin: 50px auto;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      text-align: center;
+    }
 
-        main {
-          background: rgba(0, 0, 0, 0.6);
-          padding: 30px;
-          max-width: 600px;
-          margin: 50px auto;
-          border-radius: 12px;
-          box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-          text-align: center;
-        }
+    header img {
+      width: 80px;
+      margin-bottom: 10px;
+    }
 
-        header img {
-          width: 80px;
-          margin-bottom: 10px;
-        }
+    header h1, h2 {
+      margin: 5px 0;
+    }
 
-        header h1, h2 {
-          margin: 5px 0;
-        }
+    header {
+      margin-bottom: 5px;
+    }
 
-        header {
-          margin-bottom: 5px;
-        }
+    .security-message {
+      font-size: 12px;
+      color: #00ccff;
+      margin-top: 5px;
+      margin-bottom: 15px;
+    }
 
-        .security-message {
-          font-size: 12px;
-          color: #00ccff;
-          margin-top: 5px;
-          margin-bottom: 15px;
-        }
+    input, label {
+      padding: 10px;
+      width: 100%;
+      margin-top: 15px;
+      font-size: 16px;
+      border-radius: 6px;
+      border: none;
+      display: block;
+      box-sizing: border-box;
+    }
 
-        input, label {
-          padding: 10px;
-          width: 100%;
-          margin-top: 15px;
-          font-size: 16px;
-          border-radius: 6px;
-          border: none;
-          display: block;
-          box-sizing: border-box;
-        }
+    main p:first-of-type {
+        margin-top: 10px;
+        margin-bottom: 5px;
+    }
 
-        main p:first-of-type {
-            margin-top: 10px;
-            margin-bottom: 5px;
-        }
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 16px;
+      background: #00aaff;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 6px;
+    }
 
-        button {
-          margin-top: 20px;
-          padding: 10px 20px;
-          font-size: 16px;
-          background: #00aaff;
-          color: white;
-          border: none;
-          cursor: pointer;
-          border-radius: 6px;
-        }
+    .qr {
+      margin-top: 30px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
 
-        .qr {
-          margin-top: 30px;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-        }
+    #download-btn {
+      margin-top: 20px;
+    }
 
-        #download-btn {
-          margin-top: 20px;
-        }
+    footer {
+      margin-top: 40px;
+      font-size: 14px;
+      color: #ccc;
+    }
 
-        footer {
-          margin-top: 40px;
-          font-size: 14px;
-          color: #ccc;
-        }
+    a {
+      color: #00ccff;
+      text-decoration: none;
+    }
+    
+    /* ****************************************************** */
+    /* STYLING KHUSUS UNTUK HALAMAN SANDI (FULL SCREEN LAYER) */
+    /* ****************************************************** */
+    #password-layer {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.9); /* Latar belakang gelap */
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000; /* Pastikan di atas semua konten lain */
+    }
 
-        a {
-          color: #00ccff;
-          text-decoration: none;
-        }
-        
-        /* ****************************************************** */
-        /* STYLING KHUSUS UNTUK HALAMAN SANDI (FULL SCREEN LAYER) */
-        /* ****************************************************** */
-        #password-layer {
-          position: fixed;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          background: rgba(0, 0, 0, 0.9); /* Latar belakang gelap */
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-          z-index: 1000; /* Pastikan di atas semua konten lain */
-        }
+    #password-box {
+      background: rgba(25, 25, 25, 0.95);
+      padding: 40px;
+      border-radius: 10px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+      max-width: 350px;
+      width: 90%;
+      text-align: center;
+    }
 
-        #password-box {
-          background: rgba(25, 25, 25, 0.95);
-          padding: 40px;
-          border-radius: 10px;
-          box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
-          max-width: 350px;
-          width: 90%;
-          text-align: center;
-        }
+    #password-box h2 {
+        margin-bottom: 20px;
+        color: #00aaff;
+    }
+    
+    .password-container {
+        position: relative;
+        margin-bottom: 20px;
+    }
 
-        #password-box h2 {
-            margin-bottom: 20px;
-            color: #00aaff;
-        }
-        
-        .password-container {
-            position: relative;
-            margin-bottom: 20px;
-        }
+    #password-input {
+        width: calc(100% - 20px); 
+        padding-right: 40px; /* Ruang untuk tombol mata */
+        font-size: 18px;
+    }
+    
+    #toggle-password {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: #ccc;
+        font-size: 18px;
+        padding: 5px;
+    }
 
-        #password-input {
-            width: calc(100% - 20px); 
-            padding-right: 40px; /* Ruang untuk tombol mata */
-            font-size: 18px;
-        }
-        
-        #toggle-password {
-            position: absolute;
-            right: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: none;
-            border: none;
-            cursor: pointer;
-            color: #ccc;
-            font-size: 18px;
-            padding: 5px;
-        }
-
-        #access-button {
-            width: 100%;
-            padding: 12px;
-            font-size: 18px;
-        }
-    </style>
+    #access-button {
+        width: 100%;
+        padding: 12px;
+        font-size: 18px;
+    }
+  </style>
 </head>
 <body>
 
-    <div id="password-layer">
-      <div id="password-box">
-          <h2>Akses Eksklusif</h2>
-          <p>Silakan masukkan sandi untuk mengakses QR Generator HMJ Akuntansi.</p>
-          
-          <div class="password-container">
-              <input type="password" id="password-input" placeholder="Masukkan Sandi Akses" />
-              <button id="toggle-password" onclick="togglePasswordVisibility()">👁️</button>
-          </div>
+  <div id="password-layer">
+    <div id="password-box">
+        <h2>Akses Eksklusif</h2>
+        <p>Silakan masukkan sandi untuk mengakses QR Generator.</p>
+        
+        <div class="password-container">
+            <input type="password" id="password-input" placeholder="Masukkan Sandi Akses" />
+            <button id="toggle-password" onclick="togglePasswordVisibility()">👁️</button>
+        </div>
 
-          <button id="access-button" onclick="checkPassword()">Masuk</button>
-      </div>
-    </div>
+        <button id="access-button" onclick="checkPassword()">Masuk</button>
+    </div>
+  </div>
 
 
-    <div
+  <div id="qr-generator-content">
+    <main>
+      <header>
+        <img src="Logo Unmul.png" alt="Logo Unmul" id="logo-preview"/>
+        <h1>QR Generator</h1>
+        <h2>Jurusan Akuntansi</h2>
+      </header>
+
+      <p>Masukkan link untuk membuat QR Code:</p>
+      <p class="security-message">Semua aktivitas yang ada di web ini terenkripsi secara end-to-end</p>
+
+      <input type="text" id="link" placeholder="https://contoh.com/..." />
+
+      <label for="logo">Upload logo (PNG/JPG/HEIC):</label>
+      <input type="file" id="logo" accept="image/*" />
+
+      <button onclick="generateQR()">Buat QR</button>
+
+      <div class="qr">
+        <canvas id="qr-canvas" width="300" height="300"></canvas>
+        <button id="download-btn" style="display: none;" onclick="downloadQR()">Download QR</button>
+      </div>
+
+      <footer>
+        &copy; <span id="year"></span> fiqifriday. Seluruh hak cipta dilindungi.<br/>
+        Dibuat oleh Abdurrahman Al-Ghafiqi • <a href="https://instagram.com/fiqifriday" target="_blank">📷 Instagram @fiqifriday</a>
+      </footer>
+    </main>
+  </div>
+
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+    const correctPassword = "pakzaki"; 
+
+    function togglePasswordVisibility() {
+        const passwordInput = document.getElementById('password-input');
+        const toggleButton = document.getElementById('toggle-password');
+        
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            toggleButton.textContent = '🔒';
+        } else {
+            passwordInput.type = 'password';
+            toggleButton.textContent = '👁️';
+        }
+    }
+
+    function checkPassword() {
+        const enteredPassword = document.getElementById('password-input').value.trim();
+        
+        if (enteredPassword === correctPassword) {
+            document.getElementById('password-layer').style.display = 'none';
+            document.getElementById('qr-generator-content').style.display = 'block';
+        } else {
+            alert("Sandi Akses Salah. Silakan coba lagi.");
+            document.getElementById('password-input').value = ''; 
+            document.getElementById('password-input').focus();
+        }
+    }
+
+    // **********************************************
+    // PERBAIKAN: EVENT LISTENER UNTUK TOMBOL ENTER
+    // **********************************************
+    document.addEventListener('DOMContentLoaded', (event) => {
+        const passwordInput = document.getElementById('password-input');
+        
+        if (passwordInput) {
+            passwordInput.addEventListener('keypress', function(e) {
+                // e.key === 'Enter' adalah cara modern untuk mendeteksi Enter
+                if (e.key === 'Enter') {
+                    e.preventDefault(); 
+                    checkPassword(); 
+                }
+            });
+            // Opsional: Fokuskan langsung ke input sandi saat halaman dimuat
+            passwordInput.focus();
+        }
+    });
+    // **********************************************
+
+    function generateQR() {
+      const canvas = document.getElementById("qr-canvas");
+      const ctx = canvas.getContext("2d");
+      const link = document.getElementById("link").value.trim();
+      const logoInput = document.getElementById("logo");
+      const downloadBtn = document.getElementById("download-btn");
+
+      if (!link.startsWith("http")) {
+        alert("Masukkan URL yang valid (dimulai dengan http atau https).");
+        return;
+      }
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      const qr = new QRious({
+        value: link,
+        size: 300,
+        level: 'H',
+        background: 'white',
+        foreground: 'black'
+      });
+
+      const tempImg = new Image();
+      tempImg.src = qr.toDataURL();
+      tempImg.onload = function () {
+        ctx.drawImage(tempImg, 0, 0);
+
+        if (logoInput.files && logoInput.files[0]) {
+          const reader = new FileReader();
+          reader.onload = function (e) {
+            const logo = new Image();
+            logo.src = e.target.result;
+            logo.onload = function () {
+              const size = 60;
+              const x = (canvas.width - size) / 2;
+              const y = (canvas.height - size) / 2;
+
+              ctx.fillStyle = "#fff";
+              ctx.fillRect(x - 4, y - 4, size + 8, size + 8); // border putih
+              ctx.drawImage(logo, x, y, size, size);
+
+              downloadBtn.style.display = "inline-block";
+            };
+          };
+          reader.readAsDataURL(logoInput.files[0]);
+        } else {
+          downloadBtn.style.display = "inline-block";
+        }
+      };
+    }
+
+    function downloadQR() {
+      // START: KODE PELACAKAN EVENT GA4 - Melacak klik download QR
+      gtag('event', 'qr_download', {
+          'event_category': 'QR_Converter',
+          'event_label': 'Download Button Click'
+      });
+      // END: KODE PELACAKAN EVENT GA4
+      
+      const canvas = document.getElementById("qr-canvas");
+      const link = document.createElement('a');
+      link.download = 'qr-code.png';
+      link.href = canvas.toDataURL("image/png");
+      link.click();
+    }
+  </script>
+</body>
+</html>
